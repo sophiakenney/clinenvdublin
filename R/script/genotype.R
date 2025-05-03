@@ -77,6 +77,29 @@ ggplot(arg %>%
         legend.position = "right") 
 
 
+ggplot(arg %>%
+         mutate(ID = factor(arg$ID , levels = argmat2$ID [hc$order])) %>%
+         filter(ID != "ARS16") %>%
+         filter(Class != "EFFLUX") %>%
+         mutate(Element.subtype = str_to_sentence(Element.subtype)) %>%
+         mutate(Element.subtype = ifelse(Element.subtype == "Amr", "AMR", Element.subtype))%>%
+         filter(Element.subtype %in% c("AMR","Point")) %>%
+         mutate(Class = str_to_sentence(Class)) %>%
+         mutate(Class = if_else(str_detect(Class, "uino"), "Quinolone", Class)),
+       aes(x=ID, y= Gene.symbol, fill = Class)) +
+  geom_tile(color="white")+
+  coord_fixed() + 
+  scale_fill_viridis_d(option = "A", end = 0.8) + 
+  theme_classic() +
+  guides(color = guide_legend(ncol = 1, title = "Drug Class"))+
+  theme(axis.text.y = element_text(face = "italic", color = "black"),
+        axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5, color = "black"),
+        text=element_text(size = 24),
+        axis.title = element_blank(),
+        legend.position = "right") 
+
+ggsave("../../genphen/plots/defense/ARGs.pdf", plot = last_plot())
+
 # ---- Plot Dissertation Table 5.2 ----
 
 efflux <- rbind(arg %>%
