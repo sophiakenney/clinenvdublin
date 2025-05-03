@@ -66,11 +66,11 @@ all <- raw %>%
   unique() %>%
   inner_join(pb %>%
                mutate(ID = str_remove_all(file, "\\.fastq.gz")) %>%
-               mutate(pb_sumlen = sum(sum_len)) %>%
-               mutate(pb_numseqs = sum(num_seqs)) %>%
-               mutate(pb_minlen = min(min_len)) %>%
-               mutate(pb_avglen = mean(avg_len)) %>%
-               mutate(pb_maxlen = max(max_len)) %>%
+               mutate(pb_sumlen = sum_len) %>%
+               mutate(pb_numseqs = num_seqs) %>%
+               mutate(pb_minlen = min_len) %>%
+               mutate(pb_avglen = avg_len) %>%
+               mutate(pb_maxlen = max_len) %>%
                select(ID, pb_numseqs, pb_sumlen, pb_minlen, pb_avglen, pb_maxlen), by = c("ID")) %>%
   mutate(totalassembseqs = filt_numseqs + pb_numseqs) %>%
   mutate(avgcoverage = ((filt_numseqs*filt_avglen) + (pb_numseqs*pb_avglen))/4857000) %>%
